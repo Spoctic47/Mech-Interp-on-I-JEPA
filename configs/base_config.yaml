@@ -5,7 +5,7 @@ experiment:
   patch_size: 14
 
 model:
-  name: "vit_huge_patch14_224.ijepa_in1k"
+  name: "vit_huge_patch14_gap_224.in1k_ijepa"
   pretrained: true
 
 output:

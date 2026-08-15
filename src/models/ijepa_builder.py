@@ -13,8 +13,13 @@ def build_ijepa_encoder(device=None):
         
     logging.info(f"Loading I-JEPA ViT-Huge model onto {device}...")
     
-    # We use timm to avoid dynamic git clones and brittle tarball downloads
-    model = timm.create_model('vit_huge_patch14_224.ijepa_in1k', pretrained=True)
+    # FIXED: Correct timm tag and disabled global pooling to return raw patch tokens
+    model = timm.create_model(
+        'vit_huge_patch14_gap_224.in1k_ijepa', 
+        pretrained=True,
+        num_classes=0,
+        global_pool='' 
+    )
     model = model.to(device)
     model.eval()
     
@@ -29,4 +34,3 @@ def build_ijepa_encoder(device=None):
 if __name__ == "__main__":
     # Quick test to ensure it runs independently
     encoder = build_ijepa_encoder()
-
