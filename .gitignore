@@ -1,0 +1,25 @@
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Virtual Environments
+venv/
+env/
+.env
+
+# Jupyter Notebook artifacts
+.ipynb_checkpoints/
+
+# Data and Model Weights
+data/
+outputs/
+*.pth
+*.tar
+*.pt
+
+# IDE / OS files
+.vscode/
+.idea/
+.DS_Store
