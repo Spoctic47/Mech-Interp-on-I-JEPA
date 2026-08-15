@@ -1,0 +1,12 @@
+experiment:
+  name: "causal_trace_red_square"
+  batch_size: 10
+  image_size: 224
+  patch_size: 14
+
+model:
+  name: "vit_huge_patch14_224.ijepa_in1k"
+  pretrained: true
+
+output:
+  save_dir: "outputs/causal_trace"
