@@ -1,0 +1,56 @@
+# ============================================================
+# I-JEPA Layer-wise Linear Probing — Experiment Config
+# ============================================================
+
+experiment:
+  name: "ijepa_layerwise_probing"
+  seed: 42
+
+# --- Data ---
+data:
+  # Options: "cifar10" | "tiny_imagenet" | "imagenet_hf"
+  dataset: "cifar10"
+
+  # For CIFAR-10 / Tiny-ImageNet: local download root
+  data_root: "./data"
+
+  # For imagenet_hf: your HuggingFace dataset name
+  hf_dataset_name: "imagenet-1k"
+
+  # Subset: how many classes and images per class to use
+  # Set to -1 to use all classes / all images
+  num_classes: 10          # use all 10 for CIFAR-10
+  images_per_class: 50     # 50 train + 20% held-out for val = efficient
+
+  image_size: 224           # resize to this before feeding into ViT
+  num_workers: 2            # DataLoader workers (reduce to 0 on Windows if errors)
+
+# --- Model ---
+model:
+  name: "vit_huge_patch14_gap_224.in1k_ijepa"
+  pretrained: true
+  # Layers to probe: list of ints or "all" to probe every block
+  probe_layers: "all"
+
+# --- Probe ---
+probe:
+  # Pooling strategy for the patch token sequence at each layer
+  # Options: "mean" (mean-pool all patch tokens) | "cls" (if model has CLS token)
+  pooling: "mean"
+
+  # Logistic Regression hyperparameters
+  C: 1.0                  # inverse regularization strength
+  max_iter: 1000
+  solver: "lbfgs"
+  val_fraction: 0.2        # fraction of data held out for evaluation
+
+# --- Analysis ---
+analysis:
+  compute_cka: true         # compute CKA between all layer pairs
+  tsne_layers: [0, 7, 15, 23, 31]   # which layers to visualize with t-SNE
+
+# --- Output ---
+output:
+  save_dir: "outputs/probing"
+  save_features: true       # cache extracted features to disk for re-use
+  features_dir: "outputs/probing/features"
