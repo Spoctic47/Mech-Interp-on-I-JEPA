@@ -212,8 +212,11 @@ def plot_tsne(
         idx = np.arange(n)
 
     num_classes = len(class_names)
-    cmap = plt.cm.get_cmap("tab10", num_classes)
-    colors = [cmap(i) for i in range(num_classes)]
+    try:
+        cmap = matplotlib.colormaps["tab10"]
+    except (AttributeError, KeyError):
+        cmap = plt.get_cmap("tab10")
+    colors = [cmap(i % 10) for i in range(num_classes)]
 
     for ax_i, (layer_idx, ax) in enumerate(zip(layer_indices, axes)):
         X = features[layer_idx][idx]
@@ -225,8 +228,10 @@ def plot_tsne(
             pca = PCA(n_components=pca_dim, random_state=seed)
             X   = pca.fit_transform(X)
 
-        tsne = TSNE(n_components=2, perplexity=perplexity, random_state=seed,
-                    n_iter=500, verbose=0)
+        try:
+            tsne = TSNE(n_components=2, perplexity=perplexity, random_state=seed, max_iter=500)
+        except TypeError:
+            tsne = TSNE(n_components=2, perplexity=perplexity, random_state=seed, n_iter=500)
         X_2d = tsne.fit_transform(X)
 
         for cls_i, cls_name in enumerate(class_names):
